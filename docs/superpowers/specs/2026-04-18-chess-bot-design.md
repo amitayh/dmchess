@@ -87,7 +87,7 @@ Uses `python-telegram-bot` (v21, async).
 - `python-chess`
 - `cairosvg`
 - `pillow` (transitive dependency of cairosvg)
-- `python-dotenv` (optional; fine to require for the `.env` workflow)
+- `python-dotenv` (required — loads `TELEGRAM_BOT_TOKEN` from `.env` at startup)
 
 ## Data flow — `/move e2 e4` in chat `12345`
 
