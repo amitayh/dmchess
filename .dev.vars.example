@@ -1,1 +1,2 @@
 TELEGRAM_BOT_TOKEN=your-bot-token-from-BotFather
+TELEGRAM_WEBHOOK_SECRET=any-random-opaque-string

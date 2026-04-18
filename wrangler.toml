@@ -1,0 +1,9 @@
+name = "dmchess"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Replace `id` with the value printed by `wrangler kv namespace create GAMES` (run in Task 8).
+[[kv_namespaces]]
+binding = "GAMES"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git -c user.email=amitayh@gmail.com -c user.name=amitayh commit -q -m \"Add chess telegram bot implementation plan\")",
+      "Bash(git -C /Users/amitayh/dev/dmchess branch --show-current)",
+      "Bash(git -C /Users/amitayh/dev/dmchess log --oneline)",
+      "Bash(git commit *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)"
+    ]
+  }
+}
