@@ -14,11 +14,11 @@ describe("dynboardUrl", () => {
     expect(url.searchParams.get("fen")).toBe(STARTING_FEN);
   });
 
-  it("maps perspective to the color param", () => {
+  it("flips the board for black perspective", () => {
     const white = new URL(dynboardUrl(STARTING_FEN, "white"));
     const black = new URL(dynboardUrl(STARTING_FEN, "black"));
-    expect(white.searchParams.get("color")).toBe("white");
-    expect(black.searchParams.get("color")).toBe("black");
+    expect(white.searchParams.get("flip")).toBe("0");
+    expect(black.searchParams.get("flip")).toBe("1");
   });
 
   it("includes the fixed board/piece/size/coordinates params", () => {
