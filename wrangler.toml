@@ -6,4 +6,4 @@ compatibility_flags = ["nodejs_compat"]
 # Replace `id` with the value printed by `wrangler kv namespace create GAMES` (run in Task 8).
 [[kv_namespaces]]
 binding = "GAMES"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "05a7651bbd4446a5a3a30e76e9284f7a"
