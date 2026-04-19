@@ -92,7 +92,7 @@ Stateless functions over **FEN strings**. The KV value and the function I/O are 
 ### `bot.ts` — grammY wiring
 
 - Builds the `Bot` with `TELEGRAM_BOT_TOKEN`.
-- Installs `session({ initial: () => ({ fen: "" }), storage: new CloudflareAdapter(env.GAMES) })` from `@grammyjs/storage-cloudflare`.
+- Installs `session({ initial: () => ({ fen: "" }), storage: new KvAdapter(env.GAMES) })` from `@grammyjs/storage-cloudflare`.
 - `bot.command("start", handler)` — sets `ctx.session.fen = newGame()`, sends Unicode reply, sends SVG document.
 - `bot.command("move", handler)` — parses two args, loads `ctx.session.fen`, calls `applyMove`, updates session, replies. Handles missing game and invalid move with friendly replies.
 - Catch-all command handler for unknown commands replies with a usage hint.

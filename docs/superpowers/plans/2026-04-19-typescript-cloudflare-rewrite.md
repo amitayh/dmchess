@@ -689,7 +689,7 @@ Create `src/bot.ts`:
 
 ```ts
 import { Bot, InputFile, session, type Context, type SessionFlavor } from "grammy";
-import { CloudflareAdapter } from "@grammyjs/storage-cloudflare";
+import { KvAdapter } from "@grammyjs/storage-cloudflare";
 import { applyMove, newGame } from "./game";
 import { renderUnicode } from "./rendering/unicode";
 import { renderSvg } from "./rendering/svg";
@@ -731,7 +731,7 @@ export function createBot(env: Env): Bot<BotContext> {
   bot.use(
     session<SessionData, BotContext>({
       initial: () => ({ fen: "" }),
-      storage: new CloudflareAdapter<SessionData>(env.GAMES),
+      storage: new KvAdapter<SessionData>(env.GAMES),
     }),
   );
 
