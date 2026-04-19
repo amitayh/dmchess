@@ -1,8 +1,7 @@
-import { Bot, InputFile, session, type Context, type SessionFlavor } from "grammy";
+import { Bot, session, type Context, type SessionFlavor } from "grammy";
 import { KvAdapter } from "@grammyjs/storage-cloudflare";
-import { applyMove, newGame } from "./game";
-import { renderUnicode } from "./rendering/unicode";
-import { renderSvg } from "./rendering/svg";
+import { applyMove, newGame, type Color } from "./game";
+import { dynboardUrl } from "./rendering/dynboard";
 
 export interface SessionData {
   fen: string;
@@ -25,14 +24,10 @@ function capitalize(s: string): string {
 async function sendBoard(
   ctx: BotContext,
   fen: string,
-  perspective: "white" | "black",
+  perspective: Color,
   caption: string,
-  lastMove?: string,
 ): Promise<void> {
-  const text = `<pre>${renderUnicode(fen, perspective)}</pre>\n${caption}`;
-  await ctx.reply(text, { parse_mode: "HTML" });
-  const svg = renderSvg(fen, perspective, lastMove);
-  await ctx.replyWithDocument(new InputFile(new TextEncoder().encode(svg), "board.svg"));
+  await ctx.replyWithPhoto(dynboardUrl(fen, perspective), { caption });
 }
 
 export function createBot(env: Env): Bot<BotContext> {
@@ -74,7 +69,13 @@ export function createBot(env: Env): Bot<BotContext> {
     }
 
     ctx.session.fen = result.fen;
-    await sendBoard(ctx, result.fen, result.turn, `${capitalize(result.turn)} to move.`, result.move);
+    const lastMove = `${result.move.slice(0, 2)}-${result.move.slice(2)}`;
+    await sendBoard(
+      ctx,
+      result.fen,
+      result.turn,
+      `${lastMove}. ${capitalize(result.turn)} to move.`,
+    );
   });
 
   // Catch-all for any other command.
