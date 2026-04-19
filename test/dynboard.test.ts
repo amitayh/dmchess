@@ -21,10 +21,11 @@ describe("dynboardUrl", () => {
     expect(black.searchParams.get("color")).toBe("black");
   });
 
-  it("includes the fixed board/piece/size params", () => {
+  it("includes the fixed board/piece/size/coordinates params", () => {
     const url = new URL(dynboardUrl(STARTING_FEN, "white"));
     expect(url.searchParams.get("board")).toBe("brown");
     expect(url.searchParams.get("piece")).toBe("neo");
     expect(url.searchParams.get("size")).toBe("2");
+    expect(url.searchParams.get("coordinates")).toBe("1");
   });
 });
