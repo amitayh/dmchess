@@ -17,6 +17,8 @@ export interface Env {
 
 const USAGE = "Commands: /start to begin a new game, /move <from> <to> (e.g. /move e2 e4).";
 
+export const MOVE_TEXT_REGEX = /^([a-h][1-8])\s?([a-h][1-8])$/;
+
 function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
