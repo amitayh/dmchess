@@ -15,7 +15,8 @@ export interface Env {
   GAMES: KVNamespace;
 }
 
-const USAGE = "Commands: /start to begin a new game, /move <from> <to> (e.g. /move e2 e4).";
+const USAGE =
+  "Send a move as 'e2 e4' or 'e2e4'. Commands: /start to begin a new game, /move <from> <to>.";
 
 export const MOVE_TEXT_REGEX = /^([a-h][1-8])\s?([a-h][1-8])$/;
 
@@ -30,6 +31,35 @@ async function sendBoard(
   caption: string,
 ): Promise<void> {
   await ctx.replyWithPhoto(dynboardUrl(fen, perspective), { caption });
+}
+
+async function applyMoveAndReply(
+  ctx: BotContext,
+  from: string,
+  to: string,
+): Promise<void> {
+  if (!ctx.session.fen) {
+    await ctx.reply("No game in progress. Use /start.");
+    return;
+  }
+
+  let result;
+  try {
+    result = applyMove(ctx.session.fen, from, to);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    await ctx.reply(`Invalid move: ${message}`);
+    return;
+  }
+
+  ctx.session.fen = result.fen;
+  const lastMove = `${result.move.slice(0, 2)}-${result.move.slice(2)}`;
+  await sendBoard(
+    ctx,
+    result.fen,
+    result.turn,
+    `${lastMove}. ${capitalize(result.turn)} to move.`,
+  );
 }
 
 export function createBot(env: Env): Bot<BotContext> {
@@ -54,30 +84,15 @@ export function createBot(env: Env): Bot<BotContext> {
       await ctx.reply("Usage: /move <from> <to> — e.g. /move e2 e4");
       return;
     }
-
-    if (!ctx.session.fen) {
-      await ctx.reply("No game in progress. Use /start.");
-      return;
-    }
-
     const [from, to] = args as [string, string];
-    let result;
-    try {
-      result = applyMove(ctx.session.fen, from, to);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      await ctx.reply(`Invalid move: ${message}`);
-      return;
-    }
+    await applyMoveAndReply(ctx, from, to);
+  });
 
-    ctx.session.fen = result.fen;
-    const lastMove = `${result.move.slice(0, 2)}-${result.move.slice(2)}`;
-    await sendBoard(
-      ctx,
-      result.fen,
-      result.turn,
-      `${lastMove}. ${capitalize(result.turn)} to move.`,
-    );
+  // Prefixless moves: "e2e4" or "e2 e4". Registered BEFORE the catch-all so
+  // matching text is handled here; unmatched text falls through.
+  bot.hears(MOVE_TEXT_REGEX, async (ctx) => {
+    const [, from, to] = ctx.match as unknown as [string, string, string];
+    await applyMoveAndReply(ctx, from, to);
   });
 
   // Catch-all for any other command.
