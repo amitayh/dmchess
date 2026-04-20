@@ -8,6 +8,9 @@ describe("MOVE_TEXT_REGEX", () => {
     ["a1h8", "a1", "h8"],
     ["h8a1", "h8", "a1"],
     ["a1 a1", "a1", "a1"], // regex doesn't validate legality; applyMove rejects it later
+    ["E2E4", "E2", "E4"], // captures preserve original case; caller lowercases
+    ["E2 e4", "E2", "e4"],
+    ["A1H8", "A1", "H8"],
   ])("matches %s and captures %s / %s", (input, from, to) => {
     const m = input.match(MOVE_TEXT_REGEX);
     expect(m).not.toBeNull();
@@ -17,7 +20,6 @@ describe("MOVE_TEXT_REGEX", () => {
 
   it.each([
     ["e2  e4", "double space"],
-    ["E2E4", "uppercase files"],
     ["e9e4", "rank out of range"],
     ["i2e4", "file out of range"],
     ["/e2e4", "slash prefix"],

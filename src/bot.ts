@@ -18,7 +18,7 @@ export interface Env {
 const USAGE =
   "Send a move as 'e2 e4' or 'e2e4'. Commands: /start to begin a new game, /move <from> <to>.";
 
-export const MOVE_TEXT_REGEX = /^([a-h][1-8])\s?([a-h][1-8])$/;
+export const MOVE_TEXT_REGEX = /^([a-h][1-8])\s?([a-h][1-8])$/i;
 
 function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -92,7 +92,7 @@ export function createBot(env: Env): Bot<BotContext> {
   // matching text is handled here; unmatched text falls through.
   bot.hears(MOVE_TEXT_REGEX, async (ctx) => {
     const [, from, to] = ctx.match as unknown as [string, string, string];
-    await applyMoveAndReply(ctx, from, to);
+    await applyMoveAndReply(ctx, from.toLowerCase(), to.toLowerCase());
   });
 
   // Catch-all for any other command.
