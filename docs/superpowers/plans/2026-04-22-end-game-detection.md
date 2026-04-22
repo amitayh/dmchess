@@ -45,7 +45,7 @@ describe("applyMove outcome", () => {
   it("detects checkmate (Fool's Mate) and names the winner", () => {
     // Position after 1.f3 e5 2.g4 — black to move. Qh4 is mate.
     const preMate =
-      "rnb1kbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2";
+      "rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2";
     const result = applyMove(preMate, "d8", "h4");
     expect(result.outcome).toEqual({ kind: "checkmate", winner: "black" });
   });

@@ -122,7 +122,7 @@ Existing tests that assert on `result.turn` are updated to assert `result.outcom
 New `describe("applyMove outcome", ...)` with one test per terminal outcome kind:
 
 - **Ongoing on a normal move.** `applyMove(newGame(), "e2", "e4").outcome` is `{ kind: "ongoing", turn: "black" }`.
-- **Checkmate.** From the Fool's Mate pre-mate FEN `rnb1kbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2`, play `d8-h4`; assert `{ kind: "checkmate", winner: "black" }`.
+- **Checkmate.** From the Fool's Mate pre-mate FEN `rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2`, play `d8-h4`; assert `{ kind: "checkmate", winner: "black" }`.
 - **Stalemate.** From `7k/8/5K1Q/8/8/8/8/8 w - - 0 1`, play `h6-g6`; assert `{ kind: "stalemate" }`.
 - **Insufficient material.** From a position where a capture leaves K+B vs K (e.g. `4k3/8/8/8/8/8/3r4/3BK3 w - - 0 1`, play `e1-d2` capturing the rook); assert `{ kind: "insufficient-material" }`.
 - **Generic draw (fifty-move).** From a FEN with halfmove clock at 99 and sufficient material on both sides — so the generic `isDraw()` branch is what fires, not `isInsufficientMaterial()` (e.g. `7k/8/5K2/8/8/8/1R6/8 w - - 99 50`, play `b2-b1` to tick the halfmove clock to 100); assert `{ kind: "draw" }`.
