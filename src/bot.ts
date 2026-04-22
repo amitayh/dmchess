@@ -80,14 +80,11 @@ async function applyMoveAndReply(
     return;
   }
 
-  ctx.session.fen = result.fen;
   const lastMove = `${result.move.slice(0, 2)}-${result.move.slice(2)}`;
-  await sendBoard(
-    ctx,
-    result.fen,
-    result.turn,
-    `${lastMove}. ${capitalize(result.turn)} to move.`,
-  );
+  const caption = captionFor(lastMove, result.outcome);
+  const perspective = perspectiveFor(result.outcome);
+  ctx.session.fen = result.outcome.kind === "ongoing" ? result.fen : "";
+  await sendBoard(ctx, result.fen, perspective, caption);
 }
 
 export function createBot(env: Env): Bot<BotContext> {

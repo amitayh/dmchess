@@ -13,10 +13,10 @@ describe("game", () => {
     expect(turn(newGame())).toBe("white");
   });
 
-  it("applyMove returns new FEN, UCI move, and next turn", () => {
+  it("applyMove returns new FEN, UCI move, and ongoing outcome", () => {
     const result = applyMove(newGame(), "e2", "e4");
     expect(result.move).toBe("e2e4");
-    expect(result.turn).toBe("black");
+    expect(result.outcome).toEqual({ kind: "ongoing", turn: "black" });
     // After 1.e4, the e-pawn is on e4 and e2 is empty.
     expect(result.fen).toContain("4P3"); // rank 4 has pawn on e-file
     expect(result.fen).not.toBe(newGame());

@@ -20,7 +20,6 @@ export function turn(fen: string): Color {
 export interface MoveResult {
   fen: string;
   move: string; // UCI like "e2e4" or "e7e8q"
-  turn: Color; // transitional: remove once src/bot.ts migrates to outcome
   outcome: Outcome;
 }
 
@@ -40,11 +39,9 @@ export function applyMove(fen: string, from: string, to: string): MoveResult {
   const chess = new Chess(fen);
   // chess.js v1.x throws on illegal moves and rejects bad squares.
   const move = chess.move({ from, to, promotion: "q" });
-  const nextTurn: Color = chess.turn() === "w" ? "white" : "black";
   return {
     fen: chess.fen(),
     move: `${move.from}${move.to}${move.promotion ?? ""}`,
-    turn: nextTurn,
     outcome: detectOutcome(chess),
   };
 }
