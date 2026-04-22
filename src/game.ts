@@ -20,7 +20,7 @@ export function turn(fen: string): Color {
 export interface MoveResult {
   fen: string;
   move: string; // UCI like "e2e4" or "e7e8q"
-  turn: Color;
+  turn: Color; // transitional: remove once src/bot.ts migrates to outcome
   outcome: Outcome;
 }
 
