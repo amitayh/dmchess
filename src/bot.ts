@@ -1,6 +1,6 @@
 import { Bot, session, type Context, type SessionFlavor } from "grammy";
 import { KvAdapter } from "@grammyjs/storage-cloudflare";
-import { applyMove, newGame, type Color } from "./game";
+import { applyMove, newGame, type Color, type Outcome } from "./game";
 import { dynboardUrl } from "./rendering/dynboard";
 
 export interface SessionData {
@@ -22,6 +22,34 @@ export const MOVE_TEXT_REGEX = /^([a-h][1-8])\s?([a-h][1-8])$/i;
 
 function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export function captionFor(lastMove: string, outcome: Outcome): string {
+  switch (outcome.kind) {
+    case "ongoing":
+      return `${lastMove}. ${capitalize(outcome.turn)} to move.`;
+    case "checkmate":
+      return `${lastMove}. Checkmate — ${capitalize(outcome.winner)} wins.`;
+    case "stalemate":
+      return `${lastMove}. Stalemate — draw.`;
+    case "insufficient-material":
+      return `${lastMove}. Draw by insufficient material.`;
+    case "draw":
+      return `${lastMove}. Draw.`;
+  }
+}
+
+export function perspectiveFor(outcome: Outcome): Color {
+  switch (outcome.kind) {
+    case "ongoing":
+      return outcome.turn;
+    case "checkmate":
+      return outcome.winner;
+    case "stalemate":
+    case "insufficient-material":
+    case "draw":
+      return "white";
+  }
 }
 
 async function sendBoard(
